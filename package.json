@@ -1,0 +1,16 @@
+{
+    "scripts": {
+        "test": "ts-node test.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.5"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "polytype": "^0.17.0",
+        "ts-mixins": "^1.0.0",
+        "viem": "^2.13.3"
+    }
+}
