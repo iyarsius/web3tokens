@@ -5,6 +5,7 @@ import { ContractBuilder } from "./ContractBuilder";
 import { Address } from "viem";
 
 import { ERC20 } from "../structures/ERC20";
+import { IOwnable, Ownable } from "../structures/access/Ownable";
 import {
   ERC20Mintable, IERC20Mintable,
   ERC20Pausable, IERC20Pausable,
@@ -15,6 +16,10 @@ import {
 export class ERC20Builder<T = ERC20> extends ContractBuilder {
   constructor(protected client: Client) {
     super(ERC20);
+  };
+
+  setOwnable(): ERC20Builder<T & IOwnable> {
+    return this.setExtension(Ownable);
   };
 
   setMintable(): ERC20Builder<T & IERC20Mintable> {
