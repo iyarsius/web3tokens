@@ -5,17 +5,23 @@ import { ContractBuilder } from "./ContractBuilder";
 import { Address } from "viem";
 
 import { ERC20 } from "../structures/ERC20";
-import { IOwnable, Ownable } from "../structures/access/Ownable";
+import { IOwnable, Ownable, AccessControl, IAccessControl, AccessManaged, IAccessManaged } from "../structures/access";
 import {
-  ERC20Mintable, IERC20Mintable,
-  ERC20Pausable, IERC20Pausable,
-  ERC20Burnable, IERC20Burnable,
-  ERC20FlashMint, IERC20FlashMint
+  ERC20Mintable, IERC20Mintable, ERC20Pausable, IERC20Pausable,
+  ERC20Burnable, IERC20Burnable, ERC20FlashMint, IERC20FlashMint
 } from "../structures/ERC20/extensions";
 
 export class ERC20Builder<T = ERC20> extends ContractBuilder {
   constructor(protected client: Client) {
     super(ERC20);
+  };
+
+  setAccessManaged(): ERC20Builder<T & IAccessManaged> {
+    return this.setExtension(AccessManaged);
+  }
+
+  setAccessControl(): ERC20Builder<T & IAccessControl> {
+    return this.setExtension(AccessControl);
   };
 
   setOwnable(): ERC20Builder<T & IOwnable> {

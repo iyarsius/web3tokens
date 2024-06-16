@@ -15,5 +15,5 @@ export class ContractBuilder {
 
     protected build(config: IContractConfig): any {
         return new (this.instance)(config)
-    }
+    };
 };
