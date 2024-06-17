@@ -1,23 +1,7 @@
-// src/utils/transactions/Transaction.ts
-
-import { Abi, Account, Address, Chain, ContractFunctionName, SendTransactionParameters, TransactionReceipt, encodeFunctionData } from "viem";
-import { IClient } from "../../types/Client";
-
-export interface IContractOperationConfig {
-    abi: {
-        "inputs": {
-            "name": string,
-            "type": string
-        }[],
-        "stateMutability": string,
-        "type": string
-    }[];
-    address: Address,
-    functionName: ContractFunctionName,
-    account: Account,
-    chain: Chain
-};
-
+import { TransactionReceipt, encodeFunctionData } from "viem";
+import { SendTransactionParameters } from "viem/zksync";
+import { IClient } from "../types/Client";
+import { IContractOperationConfig } from "../types/Contracts";
 
 export class ContractOperation<args extends Record<string, any>> {
     constructor(

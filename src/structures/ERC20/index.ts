@@ -1,6 +1,6 @@
 import * as abi from "../../abis/ERC20";
 import { IERC20Events, IERC20ApproveParams, IERC20TransferParams, IERC20TransferFromParams } from "../../types/ERC20";
-import { ContractOperation } from "../../utils/transactions/ContractOperation";
+import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
 import { Address } from "viem";
 
@@ -67,7 +67,7 @@ export class ERC20 {
     });
 
     /**
-     * @dev Returns the value of tokens owned by `account`.
+     * @returns the value of tokens owned by `account`.
      */
     async balanceOf(account: string): Promise<number> {
         return await this.config.client.public.readContract({
@@ -79,7 +79,7 @@ export class ERC20 {
     }
 
     /**
-     * @dev Returns the number of decimals used to get its user representation.
+     * @returns the number of decimals used to get its user representation.
      * For example, if `decimals` equals `2`, a balance of `505` tokens should
      * be displayed to a user as `5.05` (`505 / 10 ** 2`).
      *

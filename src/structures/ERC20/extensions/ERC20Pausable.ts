@@ -1,6 +1,6 @@
 import * as abi from "../../../abis/ERC20/extensions/ERC20Pausable";
 import { IERC20PausableEvents, IERC20PausablePauseParams, IERC20PausableUnpauseParams } from "../../../types/ERC20/extensions/ERC20Pausable";
-import { ContractOperation } from "../../../utils/transactions/ContractOperation";
+import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
 import { Address, WatchContractEventReturnType } from "viem";
 

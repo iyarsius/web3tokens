@@ -1,6 +1,6 @@
 import * as abi from "../../abis/access/Ownable";
 import { IOwnableEvents, IOwnableRenounceOwnershipParams, IOwnableTransferOwnershipParams } from "../../types/access/Ownable";
-import { ContractOperation } from "../../utils/transactions/ContractOperation";
+import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
 import { Address, WatchContractEventReturnType } from "viem";
 

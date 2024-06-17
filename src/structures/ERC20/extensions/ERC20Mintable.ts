@@ -1,6 +1,6 @@
 import * as abi from "../../../abis/ERC20/extensions/ERC20Mintable";
 import {  IERC20MintableMintParams } from "../../../types/ERC20/extensions/ERC20Mintable";
-import { ContractOperation } from "../../../utils/transactions/ContractOperation";
+import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
 import { Address } from "viem";
 

@@ -1,6 +1,6 @@
-import * as abi from "../../abis//access/AccessControl";
-import { IAccessControlEvents, IAccessControlGrantRoleParams, IAccessControlRenounceRoleParams, IAccessControlRevokeRoleParams } from "../../types//access/AccessControl";
-import { ContractOperation } from "../../utils/transactions/ContractOperation";
+import * as abi from "../../abis/access/AccessControl";
+import { IAccessControlEvents, IAccessControlGrantRoleParams, IAccessControlRenounceRoleParams, IAccessControlRevokeRoleParams } from "../../types/access/AccessControl";
+import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
 import { Address, WatchContractEventReturnType } from "viem";
 

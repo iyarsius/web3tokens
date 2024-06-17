@@ -1,6 +1,6 @@
 import * as abi from "../../../abis/ERC20/extensions/ERC20FlashMint";
 import { IERC20FlashMintFlashLoanParams } from "../../../types/ERC20/extensions/ERC20FlashMint";
-import { ContractOperation } from "../../../utils/transactions/ContractOperation";
+import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
 import { Address } from "viem";
 
