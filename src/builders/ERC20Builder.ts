@@ -1,5 +1,3 @@
-import { Client } from "..";
-import { IContractConfig } from "../types/Contracts";
 import { ContractBuilder } from "../structures/ContractBuilder";
 
 import { Address } from "viem";
@@ -10,9 +8,11 @@ import {
   ERC20Mintable, IERC20Mintable, ERC20Pausable, IERC20Pausable,
   ERC20Burnable, IERC20Burnable, ERC20FlashMint, IERC20FlashMint
 } from "../structures/ERC20/extensions";
+import { IClient } from "../types/Client";
+import { IContractConfig } from "../types/Contracts";
 
 export class ERC20Builder<T = ERC20> extends ContractBuilder {
-  constructor(protected client: Client) {
+  constructor(protected client: IClient) {
     super(ERC20);
   };
 
@@ -47,7 +47,7 @@ export class ERC20Builder<T = ERC20> extends ContractBuilder {
   get(address: Address): T {
     return this.build({
       client: this.client,
-      address
+      address,
     } as IContractConfig);
   }
 };

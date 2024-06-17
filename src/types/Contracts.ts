@@ -1,10 +1,11 @@
 import { Account, Address, Chain, ContractFunctionName, PublicClient, WalletClient } from "viem";
-import { IClient } from "./Client";
-import { Client } from "..";
 
 export interface IContractConfig {
     address: Address;
-    client: Client
+    client: {
+        public: PublicClient;
+        wallet: WalletClient;
+    }
 };
 
 export interface IContractEventOptions<argsType> {

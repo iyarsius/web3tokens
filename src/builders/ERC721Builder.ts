@@ -1,4 +1,3 @@
-import { Client } from "..";
 import { IContractConfig } from "../types/Contracts";
 import { ContractBuilder } from "../structures/ContractBuilder";
 
@@ -6,9 +5,10 @@ import { Address } from "viem";
 
 import { ERC721} from "../structures/ERC721";
 import { ERC721Mintable, IERC721Mintable } from "../structures/ERC721/extensions/ERC721Mintable";
+import { IClient } from "../types/Client";
 
 export class ERC721Builder<T = ERC721> extends ContractBuilder {
-  constructor(protected client: Client) {
+  constructor(protected client: IClient) {
     super(ERC721);
   };
 
