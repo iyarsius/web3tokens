@@ -5,6 +5,9 @@ import { IContractConfig } from "../../../types/Contracts";
 import { Address } from "viem";
 
 export interface IERC20Mintable {
+    /**
+     * Creates a `value` amount of tokens and assigns them to `account`, by transferring it from address(0).
+     */
     mint: ContractOperation<IERC20MintableMintParams>;
 }
 

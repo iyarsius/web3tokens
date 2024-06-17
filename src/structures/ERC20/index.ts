@@ -16,6 +16,11 @@ export class ERC20 {
 
     /**
      * Listen for contract events
+     * 
+     * @remark The function is calling `WatchContractEvent` witch will attempt to create an Event Filter
+     * and listen to changes to the Filter per polling interval, however, if the RPC Provider does not support
+     * Filters this function will not work
+      *
      * @param eventName the name of the event
      * @param callback the function to call when the event is triggered
      */
@@ -28,11 +33,14 @@ export class ERC20 {
     };
 
     /**
-     * @dev Returns the remaining number of tokens that `spender` will be
-     * allowed to spend on behalf of `owner` through {transferFrom}. This is
+     * @param owner the address who allow to spend tokens on behalf of `spender`
+     * @param spender the address allowed to spend tokens on behalf of `owner`
+     * 
+     * @returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through `transferFrom`. This is
      * zero by default.
      *
-     * This value changes when {approve} or {transferFrom} are called.
+     * This value changes when `approve` or `transferFrom` are called.
      */
     async allowance(owner: string, spender: string): Promise<number> {
         return await this.config.client.public.readContract({
@@ -44,19 +52,18 @@ export class ERC20 {
     }
 
     /**
-     * @dev Sets a `value` amount of tokens as the allowance of `spender` over the
+     * Sets a `value` amount of tokens as the allowance of `spender` over the
      * caller's tokens.
      *
      * @returns a ContractOperation instance.
      *
-     * IMPORTANT: Beware that changing an allowance with this method brings the risk
+     * @remark IMPORTANT: Beware that changing an allowance with this method brings the risk
      * that someone may use both the old and the new allowance by unfortunate
      * transaction ordering. One possible solution to mitigate this race
      * condition is to first reduce the spender's allowance to 0 and set the
      * desired value afterwards:
      * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
      *
-     * @emits Approval event.
      */
     public approve = new ContractOperation<IERC20ApproveParams>(this.config.client, {
         abi: [abi.approve],
@@ -67,6 +74,10 @@ export class ERC20 {
     });
 
     /**
+     * Check the amount of tokens that an account has in its balance.
+     * 
+     * @param account The account to check for.
+     * 
      * @returns the value of tokens owned by `account`.
      */
     async balanceOf(account: string): Promise<number> {
@@ -135,11 +146,9 @@ export class ERC20 {
     }
 
     /**
-     * @dev Moves a `value` amount of tokens from the caller's account to `to`.
+     * Moves a `value` amount of tokens from the caller's account to `to`.
      *
      * @returns a ContractOperation instance.
-     * 
-     * @emits Transfer event.
      */
     public transfer = new ContractOperation<IERC20TransferParams>(this.config.client, {
         abi: [abi.transfer],
@@ -150,7 +159,7 @@ export class ERC20 {
     });
 
     /**
-     * @dev Moves a `value` amount of tokens from `from` to `to` using the
+     * Moves a `value` amount of tokens from `from` to `to` using the
      * allowance mechanism. `value` is then deducted from the caller's
      * allowance.
      *

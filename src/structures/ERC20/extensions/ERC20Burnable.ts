@@ -5,7 +5,23 @@ import { IContractConfig } from "../../../types/Contracts";
 import { Address, WatchContractEventReturnType } from "viem";
 
 export interface IERC20Burnable {
+    /**
+     * Destroys a `value` amount of tokens from the caller.
+     * 
+     * @returns a `ContractOperation` instance.
+     */
     burn: ContractOperation<IERC20BurnableBurnParams>;
+    /**
+     * Destroys a `value` amount of tokens from `account`, deducting from
+     * the caller's allowance.
+     * 
+     * @returns a `ContractOperation` instance.
+     *
+     * @remark Requirements:
+     *
+     * - the caller must have allowance for `accounts`'s tokens of at least
+     * `value`.
+     */
     burnFrom: ContractOperation<IERC20BurnableBurnFromParams>;
 }
 

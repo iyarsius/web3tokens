@@ -1,4 +1,4 @@
-import { Hash, SimulateContractReturnType, TransactionReceipt, encodeFunctionData } from "viem";
+import { Abi, Hash, SimulateContractReturnType, TransactionReceipt, encodeFunctionData } from "viem";
 import { SendTransactionParameters } from "viem/zksync";
 import { IClient } from "../types/Client";
 import { IContractOperationConfig } from "../types/Contracts";
@@ -18,18 +18,18 @@ export class ContractOperationResult {
 
 export class ContractOperation<args extends Record<string, any>> {
     constructor(
-        private client: IClient,
-        private config: IContractOperationConfig
+        protected client: IClient,
+        protected config: IContractOperationConfig
     ) { }
 
-    private _parseArgs(args: args) {
+    protected _parseArgs(args: args) {
         return this.config.abi[0].inputs.map(arg => args[arg.name])
     }
 
     /**
-     * Execute a contract function
+     * Execute a contract function directly on the blockchain.
      * 
-     * @returns A transaction hash
+     * @returns A `ContractOperationResult` instance which contains the transaction hash
      */
     async execute(args: args): Promise<ContractOperationResult> {
         const { request } = await this.client.public.simulateContract({
@@ -43,10 +43,9 @@ export class ContractOperation<args extends Record<string, any>> {
     }
 
     /**
-     * Simulate a contract function call
+     * Simulate a contract function call.
      * 
      * @returns The result of the contract call
-     * @param T The type of the result
      */
     async simulate(args: args): Promise<SimulateContractReturnType> {
         return await this.client.public.simulateContract({

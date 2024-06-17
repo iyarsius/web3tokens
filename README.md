@@ -4,7 +4,7 @@ A library for interacting with EVM tokens such as ERC20, ERC721 and ERC1155.
 
 # Installation
 
-This package is not yet available on npm as it's still in development.
+```npm i @iyarsius/web3tokens```
 
 # Usage
 

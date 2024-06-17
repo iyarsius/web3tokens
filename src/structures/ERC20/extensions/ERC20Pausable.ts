@@ -6,8 +6,26 @@ import { Address, WatchContractEventReturnType } from "viem";
 
 export interface IERC20Pausable {
     on<T extends keyof IERC20PausableEvents>(eventName: T, callback: IERC20PausableEvents[T]): WatchContractEventReturnType;
+    /** Triggers stopped state.
+     *
+     * @remark
+     * Requirements:
+     *
+     * - The contract must not be paused.
+     */
     pause: ContractOperation<IERC20PausablePauseParams>;
+    /** Check if the contract is paused
+     * 
+     * @returns `true` if paused, otherwise returns `false`.
+     */
     paused(): Promise<boolean>;
+    /** Unpauses the contract
+      * 
+      * @remark
+      * Requirements:
+      *
+      * - The contract must be paused.
+      */
     unpause: ContractOperation<IERC20PausableUnpauseParams>;
 }
 

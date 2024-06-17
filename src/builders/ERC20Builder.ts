@@ -11,19 +11,41 @@ import {
 import { IClient } from "../types/Client";
 import { IContractConfig } from "../types/Contracts";
 
+/**
+ * An Builder allowing to build instance of ERC20 token using a custom configuration
+ * @param client The client to use for contract creation
+ */
 export class ERC20Builder<T = ERC20> extends ContractBuilder {
   constructor(protected client: IClient) {
     super(ERC20);
   };
 
+  /**
+   * a contract with `AccessManager` allows certain callers to access certain functions.
+   * this extension allows to access all functions related to authority management.
+   * 
+   * @returns The updated builder with `AccessManager` extension.
+   */
   setAccessManaged(): ERC20Builder<T & IAccessManaged> {
     return this.setExtension(AccessManaged);
   }
 
+  /**
+   * a contract with `AccessControl` allows role-based accesscontrol mechanisms.
+   * this extension allows to access all functions related to roles management.
+   * 
+   * @returns The updated builder with `AccessControl` extension.
+   */
   setAccessControl(): ERC20Builder<T & IAccessControl> {
     return this.setExtension(AccessControl);
   };
 
+  /**
+   * a contract with `Ownable` allows an owner to access certain functions.
+   * this extension allows to access all functions related ownership management.
+   * 
+   * @returns The updated builder with `Ownable` extension.
+   */
   setOwnable(): ERC20Builder<T & IOwnable> {
     return this.setExtension(Ownable);
   };
