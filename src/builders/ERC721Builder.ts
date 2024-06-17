@@ -8,6 +8,7 @@ import { ERC721Mintable, IERC721Mintable } from "../structures/ERC721/extensions
 import { IClient } from "../types/Client";
 import { ERC721Burnable, IERC721Burnable } from "../structures/ERC721/extensions/ERC721Burnable";
 import { AccessControl, AccessManaged, IAccessControl, IAccessManaged, IOwnable, Ownable } from "../structures/access";
+import { ERC721Pausable, IERC721Pausable } from "../structures/ERC721/extensions/ERC721Pausable";
 
 export class ERC721Builder<T = ERC721> extends ContractBuilder {
   constructor(protected client: IClient) {
@@ -32,6 +33,10 @@ export class ERC721Builder<T = ERC721> extends ContractBuilder {
 
   setMintable(): ERC721Builder<T & IERC721Mintable> {
     return this.setExtension(ERC721Mintable);
+  };
+
+  setPausable(): ERC721Builder<T & IERC721Pausable> {
+    return this.setExtension(ERC721Pausable);
   }
 
   get(address: Address): T {
