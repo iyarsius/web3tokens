@@ -50,9 +50,9 @@ const token = tokens.erc20()
     .setMintable()
     .setOwnable()
     .get('0x...');
-
-// current supported extensions are: mintable, burnable, pausable, flashMint, ownable, accessControl and accessManaged
 ```
+
+current supported extensions are: mintable, burnable, pausable, flashMint, ownable, accessControl and accessManaged
 
 Once you have the contract instance, you can call its methods like this:
 
@@ -63,7 +63,7 @@ const balance = await token.balanceOf(account.address); // returns the token bal
 // Write method are a bit different since you have multiple options to execute them:
 
 // 1. Simulate the transaction
-const transaction = await token.transfer.execute({
+const transaction = await token.transfer.simulate({
     to: "0x...",
     value: 50000
 });
