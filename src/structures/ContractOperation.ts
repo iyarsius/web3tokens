@@ -1,7 +1,20 @@
-import { TransactionReceipt, encodeFunctionData } from "viem";
+import { Hash, SimulateContractReturnType, TransactionReceipt, encodeFunctionData } from "viem";
 import { SendTransactionParameters } from "viem/zksync";
 import { IClient } from "../types/Client";
 import { IContractOperationConfig } from "../types/Contracts";
+
+export class ContractOperationResult {
+    constructor(public hash: Hash, protected client: IClient) { };
+
+    async waitForReceipt(confirmations: number = 1): Promise<TransactionReceipt> {
+        return await this.client.public.waitForTransactionReceipt(
+            {
+                hash: this.hash,
+                confirmations,
+            },
+        )
+    };
+}
 
 export class ContractOperation<args extends Record<string, any>> {
     constructor(
@@ -16,19 +29,17 @@ export class ContractOperation<args extends Record<string, any>> {
     /**
      * Execute a contract function
      * 
-     * @returns A transaction receipt
+     * @returns A transaction hash
      */
-    async execute(args: args): Promise<TransactionReceipt> {
+    async execute(args: args): Promise<ContractOperationResult> {
         const { request } = await this.client.public.simulateContract({
             ...this.config,
             args: this._parseArgs(args),
         });
 
-        const txHash = await this.client.wallet.writeContract(request);
+        const hash = await this.client.wallet.writeContract(request);
 
-        return await this.client.public.getTransactionReceipt({
-            hash: txHash
-        });
+        return new ContractOperationResult(hash, this.client)
     }
 
     /**
@@ -37,13 +48,11 @@ export class ContractOperation<args extends Record<string, any>> {
      * @returns The result of the contract call
      * @param T The type of the result
      */
-    async simulate<T extends any>(args: args): Promise<T> {
-        const res = await this.client.public.simulateContract({
+    async simulate(args: args): Promise<SimulateContractReturnType> {
+        return await this.client.public.simulateContract({
             ...this.config,
             args: this._parseArgs(args),
         });
-
-        return res.result
     }
 
     /**
