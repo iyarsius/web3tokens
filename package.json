@@ -16,7 +16,7 @@
   },
   "name": "@iyarsius/web3tokens",
   "description": "A library for interacting with EVM tokens such as ERC20, ERC721 and ERC1155.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": {
     "type": "git",
