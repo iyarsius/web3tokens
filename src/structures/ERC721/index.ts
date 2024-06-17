@@ -7,7 +7,7 @@ import { Address, WatchContractEventReturnType } from "viem";
 export class ERC721 {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

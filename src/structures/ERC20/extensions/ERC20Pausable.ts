@@ -14,7 +14,7 @@ export interface IERC20Pausable {
 export class ERC20Pausable implements IERC20Pausable {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

@@ -14,7 +14,7 @@ export interface IAccessManaged {
 export class AccessManaged implements IAccessManaged {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

@@ -18,7 +18,7 @@ export interface IAccessControl {
 export class AccessControl implements IAccessControl {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

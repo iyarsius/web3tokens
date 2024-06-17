@@ -14,7 +14,7 @@ export interface IOwnable {
 export class Ownable implements IOwnable {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

@@ -13,7 +13,7 @@ export interface IERC20FlashMint {
 export class ERC20FlashMint implements IERC20FlashMint {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

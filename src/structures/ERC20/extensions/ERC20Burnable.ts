@@ -12,7 +12,7 @@ export interface IERC20Burnable {
 export class ERC20Burnable implements IERC20Burnable {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 

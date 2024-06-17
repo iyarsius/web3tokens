@@ -11,7 +11,7 @@ export interface IERC721Mintable {
 export class ERC721Mintable implements IERC721Mintable {
     address: Address;
 
-    constructor(public config: IContractConfig) {
+    constructor(protected config: IContractConfig) {
         this.address = config.address
     }
 
