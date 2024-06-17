@@ -58,7 +58,7 @@ Once you have the contract instance, you can call its methods like this:
 
 ```ts
 // read method is used like this
-const balance = await token.balanceOf(account.address); // returns the token balance of the account address
+const balance = await token.balanceOf(account.address);
 
 // Write method are a bit different since you have multiple options to execute them:
 
@@ -79,13 +79,15 @@ const transaction = await token.transfer.execute({
 // this send the transanction to the blockchain and return a transaction instance that you can use like this:
 console.log(transaction.hash); // returns the transaction hash
 
-const receipt = await transaction.waitForReceipt(4); // 4 is the number of confirmations required before returning the receipt, by default it's 1
+// 4 is the number of confirmations required before returning the receipt, by default it's 1
+const receipt = await transaction.waitForReceipt(4);
 ```
 
 In case you are using a smart client with same interface than viem, you can execute batch functions. Here is an example using [zerodev batch transactions](https://docs.zerodev.app/smart-wallet/batching-transactions#sendtransactions):
 
 ```ts
-// 3. get the transaction data, ready to be executed and sent in a batch transaction for example:
+// 3. get the transaction data, ready to be executed and sent in a batch transaction,
+// for example:
 const transaction1 = await token.transfer.getTxData({
     to: "0x...",
     value: 50000
@@ -96,7 +98,8 @@ const transaction2 = await token.transfer.getTxData({
     value: 50000
 });
 
-// this function is not natively supported by viem, but some library can add ways to batch transactions using smart accounts.
+// this function is not natively supported by viem, but some library can add ways
+// to batch transactions using smart accounts.
 const txHash = await kernelClient.sendTransactions({
   transactions: [
     transaction1,
@@ -112,7 +115,8 @@ ERC721 and ERC1155 are working the same way than ERC20. You can create intances 
 const erc721 = tokens.erc721().get('0x...');
 const erc1155 = tokens.erc1155().get('0x...');
 
-// extensions available for erc721 are: Burnable, Mintable, Pausable, Ownable, AccessManaged, AccessControl
+// extensions available for erc721 are: Burnable, Mintable, Pausable,
+// Ownable, AccessManaged, AccessControl
 const erc721Burnable = tokens.erc721().setBurnable().get('0x...');
 
 // extensions available for erc1155 are being added but access are already supported:
