@@ -1,6 +1,6 @@
 import { Client } from "..";
 import { IContractConfig } from "../types/Contracts";
-import { ContractBuilder } from "./ContractBuilder";
+import { ContractBuilder } from "../structures/ContractBuilder";
 
 import { Address } from "viem";
 
