@@ -107,6 +107,16 @@ const txHash = await kernelClient.sendTransactions({
   ],
 })
 ```
+You can also listen to contract events, like this:
+
+```ts
+    token.on('Transfer', (data) => {
+        console.log(data);
+
+        // ... do stuffs
+    })
+```
+
 # ERC721 and ERC1155
 
 ERC721 and ERC1155 are working the same way than ERC20. You can create intances like this:

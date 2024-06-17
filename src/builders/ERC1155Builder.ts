@@ -6,6 +6,7 @@ import { Address } from "viem";
 import { ERC1155} from "../structures/ERC1155";
 import { IClient } from "../types/Client";
 import { AccessControl, AccessManaged, IAccessControl, IAccessManaged, IOwnable, Ownable } from "../structures/access";
+import { ERC1155Mintable, IERC1155Mintable } from "../structures/ERC1155/extensions/ERC1155Mintable";
 
 export class ERC1155Builder<T = ERC1155> extends ContractBuilder {
   constructor(protected client: IClient) {
@@ -22,7 +23,11 @@ export class ERC1155Builder<T = ERC1155> extends ContractBuilder {
 
   setAccessManaged(): ERC1155Builder<T & IAccessManaged> {
     return this.setExtension(AccessManaged);
-  }
+  };
+
+  setMintable(): ERC1155Builder<T & IERC1155Mintable> {
+    return this.setExtension(ERC1155Mintable);
+  };
 
   get(address: Address): T {
     return this.build({
