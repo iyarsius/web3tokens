@@ -10,6 +10,9 @@ import { ERC721Burnable, IERC721Burnable } from "../structures/ERC721/extensions
 import { AccessControl, AccessManaged, IAccessControl, IAccessManaged, IOwnable, Ownable } from "../structures/access";
 import { ERC721Pausable, IERC721Pausable } from "../structures/ERC721/extensions/ERC721Pausable";
 
+/**
+ * @category Builders
+ */
 export class ERC721Builder<T = ERC721> extends ContractBuilder {
     constructor(protected client: IClient) {
         super(ERC721);

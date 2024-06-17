@@ -2,7 +2,7 @@ import * as abi from "../../abis/ERC1155";
 import { IERC1155Events, IERC1155SafeBatchTransferFromParams, IERC1155SafeTransferFromParams, IERC1155SetApprovalForAllParams } from "../../types/ERC1155";
 import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
+import { Address } from "viem";
 
 export class ERC1155 {
     address: Address;

@@ -1,22 +1,22 @@
 {
   "scripts": {
     "test": "ts-node test.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "sendNpm": "tsc && cd ./dist && npm version patch && npm publish --access=public"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "dotenv": "^16.4.5",
     "ts-node": "^10.9.2",
+    "typedoc-theme-hierarchy": "^4.1.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "polytype": "^0.17.0",
-    "ts-mixins": "^1.0.0",
     "viem": "^2.13.3"
   },
   "name": "@iyarsius/web3tokens",
   "description": "A library for interacting with EVM tokens such as ERC20, ERC721 and ERC1155.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "repository": {
     "type": "git",

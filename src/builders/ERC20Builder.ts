@@ -12,7 +12,9 @@ import { IClient } from "../types/Client";
 import { IContractConfig } from "../types/Contracts";
 
 /**
- * An Builder allowing to build instance of ERC20 token using a custom configuration
+ * @category Builders
+ * 
+ * @description A Builder allowing to build instance of ERC20 token using a custom configuration
  * @param client The client to use for contract creation
  */
 export class ERC20Builder<T = ERC20> extends ContractBuilder {

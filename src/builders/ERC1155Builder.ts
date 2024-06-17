@@ -8,6 +8,9 @@ import { IClient } from "../types/Client";
 import { AccessControl, AccessManaged, IAccessControl, IAccessManaged, IOwnable, Ownable } from "../structures/access";
 import { ERC1155Mintable, IERC1155Mintable } from "../structures/ERC1155/extensions/ERC1155Mintable";
 
+/**
+ * @category Builders
+ */
 export class ERC1155Builder<T = ERC1155> extends ContractBuilder {
     constructor(protected client: IClient) {
         super(ERC1155);

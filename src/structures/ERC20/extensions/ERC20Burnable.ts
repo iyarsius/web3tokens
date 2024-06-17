@@ -2,7 +2,7 @@ import * as abi from "../../../abis/ERC20/extensions/ERC20Burnable";
 import { IERC20BurnableBurnParams, IERC20BurnableBurnFromParams } from "../../../types/ERC20/extensions/ERC20Burnable";
 import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
+import { Address } from "viem";
 
 export interface IERC20Burnable {
     /**
