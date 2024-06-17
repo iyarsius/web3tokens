@@ -4,23 +4,7 @@ import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
 import { Address, WatchContractEventReturnType } from "viem";
 
-export interface IERC721 {
-    on<T extends keyof IERC721Events>(eventName: T, callback: IERC721Events[T]): WatchContractEventReturnType;
-    approve: ContractOperation<IERC721ApproveParams>;
-    balanceOf(owner: string): Promise<number>;
-    getApproved(tokenId: number): Promise<string>;
-    isApprovedForAll(owner: string, operator: string): Promise<boolean>;
-    name(): Promise<string>;
-    ownerOf(tokenId: number): Promise<string>;
-    safeTransferFrom: ContractOperation<IERC721SafeTransferFromParams>;
-    setApprovalForAll: ContractOperation<IERC721SetApprovalForAllParams>;
-    supportsInterface(interfaceId: string): Promise<boolean>;
-    symbol(): Promise<string>;
-    tokenURI(tokenId: number): Promise<string>;
-    transferFrom: ContractOperation<IERC721TransferFromParams>;
-}
-
-export class ERC721 implements IERC721 {
+export class ERC721 {
     address: Address;
 
     constructor(public config: IContractConfig) {
