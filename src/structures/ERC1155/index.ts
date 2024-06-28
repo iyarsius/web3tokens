@@ -46,29 +46,38 @@ export class ERC1155 {
         }) as any
     }
 
-    public safeBatchTransferFrom = new ContractOperation<IERC1155SafeBatchTransferFromParams>(this.config.client, {
-        abi: [abi.safeBatchTransferFrom],
-        address: this.config.address,
-        functionName: "safeBatchTransferFrom",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public safeBatchTransferFrom(args: IERC1155SafeBatchTransferFromParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.safeBatchTransferFrom],
+            args,
+            address: this.config.address,
+            functionName: "safeBatchTransferFrom",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
-    public safeTransferFrom = new ContractOperation<IERC1155SafeTransferFromParams>(this.config.client, {
-        abi: [abi.safeTransferFrom],
-        address: this.config.address,
-        functionName: "safeTransferFrom",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public safeTransferFrom(args: IERC1155SafeTransferFromParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.safeTransferFrom],
+            args,
+            address: this.config.address,
+            functionName: "safeTransferFrom",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
-    public setApprovalForAll = new ContractOperation<IERC1155SetApprovalForAllParams>(this.config.client, {
-        abi: [abi.setApprovalForAll],
-        address: this.config.address,
-        functionName: "setApprovalForAll",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public setApprovalForAll(args: IERC1155SetApprovalForAllParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.setApprovalForAll],
+            args,
+            address: this.config.address,
+            functionName: "setApprovalForAll",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
     async supportsInterface(interfaceId: string): Promise<boolean> {
         return await this.config.client.public.readContract({
@@ -80,13 +89,13 @@ export class ERC1155 {
     }
 
     /**
-     * @dev See {IERC1155MetadataURI-uri}.
+     * @dev See IERC1155MetadataURI-uri.
      *
      * This implementation returns the same URI for *all* token types. It relies
      * on the token type ID substitution mechanism
      * https://eips.ethereum.org/EIPS/eip-1155#metadata[defined in the EIP].
      *
-     * Clients calling this function must replace the `\{id\}` substring with the
+     * Clients calling this function must replace the `id` substring with the
      * actual token type ID.
      */
     async uri(id: number): Promise<string> {
@@ -94,7 +103,7 @@ export class ERC1155 {
             abi: [abi.uri],
             address: this.address,
             functionName: "uri",
-            args: [ id ]
+            args: [id]
         }) as any
     }
 

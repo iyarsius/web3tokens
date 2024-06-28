@@ -3,8 +3,8 @@ import { ERC20Builder } from "../builders/ERC20Builder";
 import { ERC721Builder } from "../builders/ERC721Builder";
 import { ERC1155Builder } from "../builders/ERC1155Builder";
 
-export class Web3Tokens {
-    constructor(protected client: IClient) {};
+export class Client {
+    constructor(protected client: IClient) { };
 
     /**
      * Create a builder for an ERC-20 token witch allows to add extensions

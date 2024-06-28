@@ -1,15 +1,8 @@
 import * as abi from "../../abis/access/AccessManaged";
-import { IAccessManagedEvents, IAccessManagedSetAuthorityParams } from "../../types/access/AccessManaged";
+import { IAccessManaged, IAccessManagedEvents, IAccessManagedSetAuthorityParams } from "../../types/access/AccessManaged";
 import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
-
-export interface IAccessManaged {
-    on<T extends keyof IAccessManagedEvents>(eventName: T, callback: IAccessManagedEvents[T]): WatchContractEventReturnType;
-    authority(): Promise<string>;
-    isConsumingScheduledOp(): Promise<string>;
-    setAuthority: ContractOperation<IAccessManagedSetAuthorityParams>;
-}
+import { Address } from "viem";
 
 export class AccessManaged implements IAccessManaged {
     address: Address;
@@ -44,12 +37,14 @@ export class AccessManaged implements IAccessManaged {
         }) as any
     }
 
-    public setAuthority = new ContractOperation<IAccessManagedSetAuthorityParams>(this.config.client, {
-        abi: [abi.setAuthority],
-        address: this.config.address,
-        functionName: "setAuthority",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
-
+    public setAuthority(args: IAccessManagedSetAuthorityParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.setAuthority],
+            args,
+            address: this.config.address,
+            functionName: "setAuthority",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 }

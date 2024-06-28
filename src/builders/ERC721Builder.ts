@@ -4,11 +4,13 @@ import { ContractBuilder } from "../structures/ContractBuilder";
 import { Address } from "viem";
 
 import { ERC721 } from "../structures/ERC721";
-import { ERC721Mintable, IERC721Mintable } from "../structures/ERC721/extensions/ERC721Mintable";
+import { ERC721Mintable } from "../structures/ERC721/extensions/ERC721Mintable";
 import { IClient } from "../types/Client";
-import { ERC721Burnable, IERC721Burnable } from "../structures/ERC721/extensions/ERC721Burnable";
-import { AccessControl, AccessManaged, IAccessControl, IAccessManaged, IOwnable, Ownable } from "../structures/access";
-import { ERC721Pausable, IERC721Pausable } from "../structures/ERC721/extensions/ERC721Pausable";
+import { ERC721Burnable } from "../structures/ERC721/extensions/ERC721Burnable";
+import { AccessControl, AccessManaged, Ownable } from "../structures/access";
+import { IAccessControl, IAccessManaged, IOwnable } from "../types/access";
+import { ERC721Pausable } from "../structures/ERC721/extensions/ERC721Pausable";
+import { IERC721Burnable, IERC721Mintable, IERC721Pausable } from "../types/ERC721";
 
 /**
  * @category Builders

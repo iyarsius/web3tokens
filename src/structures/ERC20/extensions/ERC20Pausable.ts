@@ -1,33 +1,8 @@
 import * as abi from "../../../abis/ERC20/extensions/ERC20Pausable";
-import { IERC20PausableEvents, IERC20PausablePauseParams, IERC20PausableUnpauseParams } from "../../../types/ERC20/extensions/ERC20Pausable";
+import { IERC20Pausable, IERC20PausableEvents, IERC20PausablePauseParams, IERC20PausableUnpauseParams } from "../../../types/ERC20/extensions/ERC20Pausable";
 import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
-
-export interface IERC20Pausable {
-    on<T extends keyof IERC20PausableEvents>(eventName: T, callback: IERC20PausableEvents[T]): WatchContractEventReturnType;
-    /** Triggers stopped state.
-     *
-     * @remark
-     * Requirements:
-     *
-     * - The contract must not be paused.
-     */
-    pause: ContractOperation<IERC20PausablePauseParams>;
-    /** Check if the contract is paused
-     * 
-     * @returns `true` if paused, otherwise returns `false`.
-     */
-    paused(): Promise<boolean>;
-    /** Unpauses the contract
-      * 
-      * @remark
-      * Requirements:
-      *
-      * - The contract must be paused.
-      */
-    unpause: ContractOperation<IERC20PausableUnpauseParams>;
-}
+import { Address } from "viem";
 
 export class ERC20Pausable implements IERC20Pausable {
     address: Address;
@@ -44,13 +19,16 @@ export class ERC20Pausable implements IERC20Pausable {
         })
     };
 
-    public pause = new ContractOperation<IERC20PausablePauseParams>(this.config.client, {
-        abi: [abi.pause],
-        address: this.config.address,
-        functionName: "pause",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public pause(args: IERC20PausablePauseParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.pause],
+            args,
+            address: this.config.address,
+            functionName: "pause",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 
     async paused(): Promise<boolean> {
         return await this.config.client.public.readContract({
@@ -59,14 +37,16 @@ export class ERC20Pausable implements IERC20Pausable {
             functionName: "paused",
             args: []
         }) as any
-    }
+    };
 
-    public unpause = new ContractOperation<IERC20PausableUnpauseParams>(this.config.client, {
-        abi: [abi.unpause],
-        address: this.config.address,
-        functionName: "unpause",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
-
+    public unpause(args: IERC20PausableUnpauseParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.unpause],
+            args,
+            address: this.config.address,
+            functionName: "unpause",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 }

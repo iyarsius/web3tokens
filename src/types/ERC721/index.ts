@@ -1,5 +1,9 @@
 import { Log } from "viem";
 
+export * from "./extensions/ERC721Burnable";
+export * from "./extensions/ERC721Mintable";
+export * from "./extensions/ERC721Pausable";
+
 export interface IERC721Events {
   Approval: (data: (Log & { args: IERC721ApprovalEventParams })) => void;
   ApprovalForAll: (data: (Log & { args: IERC721ApprovalForAllEventParams })) => void;

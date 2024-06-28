@@ -1,3 +1,5 @@
+import { ContractOperation } from "../../../structures/ContractOperation";
+
 export interface IERC1155MintableMintBatchParams {
   to: string;
   ids: number[];
@@ -12,3 +14,7 @@ export interface IERC1155MintableMintParams {
   data: string
 }
 
+export interface IERC1155Mintable {
+  mintBatch: (args: IERC1155MintableMintBatchParams) => ContractOperation;
+  mint: (args: IERC1155MintableMintParams) => ContractOperation;
+}

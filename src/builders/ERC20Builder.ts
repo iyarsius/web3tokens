@@ -3,11 +3,10 @@ import { ContractBuilder } from "../structures/ContractBuilder";
 import { Address } from "viem";
 
 import { ERC20 } from "../structures/ERC20";
-import { IOwnable, Ownable, AccessControl, IAccessControl, AccessManaged, IAccessManaged } from "../structures/access";
-import {
-  ERC20Mintable, IERC20Mintable, ERC20Pausable, IERC20Pausable,
-  ERC20Burnable, IERC20Burnable, ERC20FlashMint, IERC20FlashMint
-} from "../structures/ERC20/extensions";
+import { Ownable, AccessControl, AccessManaged } from "../structures/access";
+import { IOwnable, IAccessControl, IAccessManaged } from "../types/access";
+import { ERC20Mintable, ERC20Pausable, ERC20Burnable, ERC20FlashMint } from "../structures/ERC20/extensions";
+import { IERC20Mintable, IERC20Burnable, IERC20Pausable, IERC20FlashMint } from "../types/ERC20";
 import { IClient } from "../types/Client";
 import { IContractConfig } from "../types/Contracts";
 
@@ -46,7 +45,7 @@ export class ERC20Builder<T = ERC20> extends ContractBuilder {
    * a contract with `Ownable` allows an owner to access certain functions.
    * this extension allows to access all functions related ownership management.
    * 
-   * @returns The updated builder with `Ownable` extension.
+   * @returns The updated ERC20 builder with `Ownable` extension.
    */
   setOwnable(): ERC20Builder<T & IOwnable> {
     return this.setExtension(Ownable);

@@ -1,15 +1,8 @@
 import * as abi from "../../abis/access/Ownable";
-import { IOwnableEvents, IOwnableRenounceOwnershipParams, IOwnableTransferOwnershipParams } from "../../types/access/Ownable";
+import { IOwnable, IOwnableEvents, IOwnableRenounceOwnershipParams, IOwnableTransferOwnershipParams } from "../../types/access/Ownable";
 import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
-
-export interface IOwnable {
-    on<T extends keyof IOwnableEvents>(eventName: T, callback: IOwnableEvents[T]): WatchContractEventReturnType;
-    owner(): Promise<string>;
-    renounceOwnership: ContractOperation<IOwnableRenounceOwnershipParams>;
-    transferOwnership: ContractOperation<IOwnableTransferOwnershipParams>;
-}
+import { Address } from "viem";
 
 export class Ownable implements IOwnable {
     address: Address;
@@ -35,20 +28,25 @@ export class Ownable implements IOwnable {
         }) as any
     }
 
-    public renounceOwnership = new ContractOperation<IOwnableRenounceOwnershipParams>(this.config.client, {
-        abi: [abi.renounceOwnership],
-        address: this.config.address,
-        functionName: "renounceOwnership",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public renounceOwnership(args: IOwnableRenounceOwnershipParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.renounceOwnership],
+            args,
+            address: this.config.address,
+            functionName: "renounceOwnership",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 
-    public transferOwnership = new ContractOperation<IOwnableTransferOwnershipParams>(this.config.client, {
-        abi: [abi.transferOwnership],
-        address: this.config.address,
-        functionName: "transferOwnership",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
-
+    public transferOwnership(args: IOwnableTransferOwnershipParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.transferOwnership],
+            args,
+            address: this.config.address,
+            functionName: "transferOwnership",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 }

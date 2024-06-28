@@ -1,30 +1,10 @@
 import * as abi from "../../../abis/ERC20/extensions/ERC20Burnable";
-import { IERC20BurnableBurnParams, IERC20BurnableBurnFromParams } from "../../../types/ERC20/extensions/ERC20Burnable";
+import { IERC20BurnableBurnParams, IERC20BurnableBurnFromParams, IERC20Burnable } from "../../../types/ERC20/extensions/ERC20Burnable";
 import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
 import { Address } from "viem";
 
-export interface IERC20Burnable {
-    /**
-     * Destroys a `value` amount of tokens from the caller.
-     * 
-     * @returns a `ContractOperation` instance.
-     */
-    burn: ContractOperation<IERC20BurnableBurnParams>;
-    /**
-     * Destroys a `value` amount of tokens from `account`, deducting from
-     * the caller's allowance.
-     * 
-     * @returns a `ContractOperation` instance.
-     *
-     * @remark Requirements:
-     *
-     * - the caller must have allowance for `accounts`'s tokens of at least
-     * `value`.
-     */
-    burnFrom: ContractOperation<IERC20BurnableBurnFromParams>;
-}
-
+/** {@inheritdoc IERC20Burnable} */
 export class ERC20Burnable implements IERC20Burnable {
     address: Address;
 
@@ -32,20 +12,63 @@ export class ERC20Burnable implements IERC20Burnable {
         this.address = config.address
     }
 
-    public burn = new ContractOperation<IERC20BurnableBurnParams>(this.config.client, {
-        abi: [abi.burn],
-        address: this.config.address,
-        functionName: "burn",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    /** {@inheritdoc IERC20Burnable.burn}
+     * 
+     * @example
+     * ```ts
+     * const balance = await erc20.balanceOf(myAddress); // return 2000n
+     * 
+     * const tx = await erc20.burn({
+     *   // value is in lower units. (see ERC20.decimals())
+     *   value: 1000n
+     * }).execute();
+     * 
+     * // wait for 3 confirmations
+     * await tx.waitForReceipt(3);
+     * 
+     * // check balance again
+     * const newBalance = await erc20.balanceOf(myAddress); // return 1000n
+     * ```
+     */
+    public burn(args: IERC20BurnableBurnParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.burn],
+            args,
+            address: this.config.address,
+            functionName: "burn",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 
-    public burnFrom = new ContractOperation<IERC20BurnableBurnFromParams>(this.config.client, {
-        abi: [abi.burnFrom],
-        address: this.config.address,
-        functionName: "burnFrom",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    /** {@inheritdoc IERC20Burnable.burnFrom}
+     * 
+     * @example
+     * ```ts
+     * const balance = await erc20.balanceOf(accountAddress); // return 20n
+     * 
+     * // value is in lower units. (see ERC20.decimals())
+     * const tx = await erc20.burnFrom({
+     *    account: accountAddress,
+     *    value: 10n * 10 ** decimals
+     * }).execute(); // burn 10 tokens
+     * 
+     * // wait for 3 confirmations
+     * await tx.waitForReceipt(3);
+     * 
+     * // check balance again
+     * const newBalance = await erc20.balanceOf(accountAddress); // return 10n
+     * ```
+     */
+    public burnFrom(args: IERC20BurnableBurnFromParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.burnFrom],
+            args,
+            address: this.config.address,
+            functionName: "burnFrom",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 
 }

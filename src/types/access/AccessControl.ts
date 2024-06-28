@@ -1,4 +1,5 @@
-import { Log } from "viem";
+import { Log, WatchContractEventReturnType } from "viem";
+import { ContractOperation } from "../../structures/ContractOperation";
 
 export interface IAccessControlEvents {
   RoleAdminChanged: (data: (Log & { args: IAccessControlRoleAdminChangedEventParams })) => void;
@@ -38,3 +39,13 @@ export interface IAccessControlRevokeRoleParams {
   account: string
 }
 
+export interface IAccessControl {
+  on<T extends keyof IAccessControlEvents>(eventName: T, callback: IAccessControlEvents[T]): WatchContractEventReturnType;
+  DEFAULT_ADMIN_ROLE(): Promise<string>;
+  getRoleAdmin(role: string): Promise<string>;
+  grantRole: (args: IAccessControlGrantRoleParams) => ContractOperation;
+  hasRole(role: string, account: string): Promise<boolean>;
+  renounceRole: (args: IAccessControlRenounceRoleParams) => ContractOperation;
+  revokeRole: (args: IAccessControlRevokeRoleParams) => ContractOperation;
+  supportsInterface(interfaceId: string): Promise<boolean>;
+}

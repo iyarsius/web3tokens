@@ -1,19 +1,8 @@
 import * as abi from "../../abis/access/AccessControl";
-import { IAccessControlEvents, IAccessControlGrantRoleParams, IAccessControlRenounceRoleParams, IAccessControlRevokeRoleParams } from "../../types/access/AccessControl";
+import { IAccessControl, IAccessControlEvents, IAccessControlGrantRoleParams, IAccessControlRenounceRoleParams, IAccessControlRevokeRoleParams } from "../../types/access/AccessControl";
 import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
-
-export interface IAccessControl {
-    on<T extends keyof IAccessControlEvents>(eventName: T, callback: IAccessControlEvents[T]): WatchContractEventReturnType;
-    DEFAULT_ADMIN_ROLE(): Promise<string>;
-    getRoleAdmin(role: string): Promise<string>;
-    grantRole: ContractOperation<IAccessControlGrantRoleParams>;
-    hasRole(role: string, account: string): Promise<boolean>;
-    renounceRole: ContractOperation<IAccessControlRenounceRoleParams>;
-    revokeRole: ContractOperation<IAccessControlRevokeRoleParams>;
-    supportsInterface(interfaceId: string): Promise<boolean>;
-}
+import { Address } from "viem";
 
 export class AccessControl implements IAccessControl {
     address: Address;
@@ -48,13 +37,16 @@ export class AccessControl implements IAccessControl {
         }) as any
     }
 
-    public grantRole = new ContractOperation<IAccessControlGrantRoleParams>(this.config.client, {
-        abi: [abi.grantRole],
-        address: this.config.address,
-        functionName: "grantRole",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public grantRole(args: IAccessControlGrantRoleParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.grantRole],
+            args,
+            address: this.config.address,
+            functionName: "grantRole",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
     async hasRole(role: string, account: string): Promise<boolean> {
         return await this.config.client.public.readContract({
@@ -65,21 +57,27 @@ export class AccessControl implements IAccessControl {
         }) as any
     }
 
-    public renounceRole = new ContractOperation<IAccessControlRenounceRoleParams>(this.config.client, {
-        abi: [abi.renounceRole],
-        address: this.config.address,
-        functionName: "renounceRole",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public renounceRole(args: IAccessControlRenounceRoleParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.renounceRole],
+            args,
+            address: this.config.address,
+            functionName: "renounceRole",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 
-    public revokeRole = new ContractOperation<IAccessControlRevokeRoleParams>(this.config.client, {
-        abi: [abi.revokeRole],
-        address: this.config.address,
-        functionName: "revokeRole",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public revokeRole(args: IAccessControlRevokeRoleParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.revokeRole],
+            args,
+            address: this.config.address,
+            functionName: "revokeRole",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    };
 
     async supportsInterface(interfaceId: string): Promise<boolean> {
         return await this.config.client.public.readContract({

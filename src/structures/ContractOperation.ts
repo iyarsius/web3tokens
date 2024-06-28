@@ -1,28 +1,18 @@
-import { Abi, Hash, SimulateContractReturnType, TransactionReceipt, encodeFunctionData } from "viem";
+import { SimulateContractReturnType, TransactionReceipt, encodeFunctionData } from "viem";
 import { SendTransactionParameters } from "viem/zksync";
 import { IClient } from "../types/Client";
 import { IContractOperationConfig } from "../types/Contracts";
+import { ContractOperationResult } from "./ContractOperationResult";
 
-export class ContractOperationResult {
-    constructor(public hash: Hash, protected client: IClient) { };
-
-    async waitForReceipt(confirmations: number = 1): Promise<TransactionReceipt> {
-        return await this.client.public.waitForTransactionReceipt(
-            {
-                hash: this.hash,
-                confirmations,
-            },
-        )
-    };
-}
-
-export class ContractOperation<args extends Record<string, any>> {
+export class ContractOperation {
     constructor(
         protected client: IClient,
         protected config: IContractOperationConfig
     ) { }
 
-    protected _parseArgs(args: args) {
+    protected _parseArgs() {
+        const args = this.config.args;
+
         return this.config.abi[0].inputs.map(arg => args[arg.name])
     }
 
@@ -31,10 +21,10 @@ export class ContractOperation<args extends Record<string, any>> {
      * 
      * @returns A `ContractOperationResult` instance which contains the transaction hash
      */
-    async execute(args: args): Promise<ContractOperationResult> {
+    async execute(): Promise<ContractOperationResult> {
         const { request } = await this.client.public.simulateContract({
             ...this.config,
-            args: this._parseArgs(args),
+            args: this._parseArgs(),
         });
 
         const hash = await this.client.wallet.writeContract(request);
@@ -47,10 +37,10 @@ export class ContractOperation<args extends Record<string, any>> {
      * 
      * @returns The result of the contract call
      */
-    async simulate(args: args): Promise<SimulateContractReturnType> {
+    async simulate(): Promise<SimulateContractReturnType> {
         return await this.client.public.simulateContract({
             ...this.config,
-            args: this._parseArgs(args),
+            args: this._parseArgs(),
         });
     }
 
@@ -59,11 +49,11 @@ export class ContractOperation<args extends Record<string, any>> {
       * 
       * @returns The transaction data
       */
-    async getTxData(args: args): Promise<SendTransactionParameters> {
+    async getTxData(): Promise<SendTransactionParameters> {
         const functionData = encodeFunctionData({
             abi: this.config.abi,
             functionName: this.config.functionName,
-            args: this._parseArgs(args),
+            args: this._parseArgs(),
         });
 
         return {

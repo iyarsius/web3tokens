@@ -1,4 +1,5 @@
-import { Log } from "viem";
+import { Log, WatchContractEventReturnType } from "viem";
+import { ContractOperation } from "../../../structures/ContractOperation";
 
 export interface IERC721PausableEvents {
    Paused: (data: (Log & { args: IERC721PausablePausedEventParams })) => void;
@@ -21,3 +22,9 @@ export interface IERC721PausableUnpauseParams {
 
 }
 
+export interface IERC721Pausable {
+   on<T extends keyof IERC721PausableEvents>(eventName: T, callback: IERC721PausableEvents[T]): WatchContractEventReturnType;
+   pause: (args: IERC721PausablePauseParams) => ContractOperation;
+   paused(): Promise<boolean>;
+   unpause: (args: IERC721PausableUnpauseParams) => ContractOperation;
+}

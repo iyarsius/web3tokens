@@ -5,8 +5,10 @@ import { Address } from "viem";
 
 import { ERC1155 } from "../structures/ERC1155";
 import { IClient } from "../types/Client";
-import { AccessControl, AccessManaged, IAccessControl, IAccessManaged, IOwnable, Ownable } from "../structures/access";
-import { ERC1155Mintable, IERC1155Mintable } from "../structures/ERC1155/extensions/ERC1155Mintable";
+import { AccessControl, AccessManaged, Ownable } from "../structures/access";
+import { IAccessControl, IAccessManaged, IOwnable } from "../types/access";
+import { ERC1155Mintable } from "../structures/ERC1155/extensions";
+import { IERC1155Mintable } from "../types/ERC1155";
 
 /**
  * @category Builders

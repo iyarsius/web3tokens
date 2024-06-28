@@ -8,19 +8,20 @@ export interface IContractConfig {
     }
 };
 
-export interface IContractEventOptions<argsType> {
-    filters?: { [key in keyof argsType]?: any[] };
-};
+export interface ISimpleAbiInput {
+    name: string;
+    type: string;
+}
 
-export interface IContractOperationConfig {
-    abi: {
-        "inputs": {
-            "name": string,
-            "type": string
-        }[],
-        "stateMutability": string,
-        "type": string
-    }[];
+export interface ISimpleAbi {
+    inputs: ISimpleAbiInput[],
+    stateMutability: string,
+    type: string
+}
+
+export interface IContractOperationConfig<T = Record<string, any>> {
+    abi: ISimpleAbi[];
+    args: T,
     address: Address,
     functionName: ContractFunctionName,
     account: Account,

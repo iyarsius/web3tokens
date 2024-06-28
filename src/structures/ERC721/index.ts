@@ -2,7 +2,7 @@ import * as abi from "../../abis/ERC721";
 import { IERC721Events, IERC721ApproveParams, IERC721SafeTransferFromParams, IERC721SetApprovalForAllParams, IERC721TransferFromParams } from "../../types/ERC721";
 import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
+import { Address } from "viem";
 
 export class ERC721 {
     address: Address;
@@ -19,13 +19,16 @@ export class ERC721 {
         })
     };
 
-    public approve = new ContractOperation<IERC721ApproveParams>(this.config.client, {
-        abi: [abi.approve],
-        address: this.config.address,
-        functionName: "approve",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public approve(args: IERC721ApproveParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.approve],
+            args,
+            address: this.config.address,
+            functionName: "approve",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
     async balanceOf(owner: string): Promise<number> {
         return await this.config.client.public.readContract({
@@ -72,21 +75,27 @@ export class ERC721 {
         }) as any
     }
 
-    public safeTransferFrom = new ContractOperation<IERC721SafeTransferFromParams>(this.config.client, {
-        abi: [abi.safeTransferFrom],
-        address: this.config.address,
-        functionName: "safeTransferFrom",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public safeTransferFrom(args: IERC721SafeTransferFromParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.safeTransferFrom],
+            args,
+            address: this.config.address,
+            functionName: "safeTransferFrom",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
-    public setApprovalForAll = new ContractOperation<IERC721SetApprovalForAllParams>(this.config.client, {
-        abi: [abi.setApprovalForAll],
-        address: this.config.address,
-        functionName: "setApprovalForAll",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public setApprovalForAll(args: IERC721SetApprovalForAllParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.setApprovalForAll],
+            args,
+            address: this.config.address,
+            functionName: "setApprovalForAll",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
     async supportsInterface(interfaceId: string): Promise<boolean> {
         return await this.config.client.public.readContract({
@@ -115,12 +124,15 @@ export class ERC721 {
         }) as any
     }
 
-    public transferFrom = new ContractOperation<IERC721TransferFromParams>(this.config.client, {
-        abi: [abi.transferFrom],
-        address: this.config.address,
-        functionName: "transferFrom",
-        account: this.config.client.wallet.account!,
-        chain: this.config.client.wallet.chain!
-    });
+    public transferFrom(args: IERC721TransferFromParams) {
+        return new ContractOperation(this.config.client, {
+            abi: [abi.transferFrom],
+            args,
+            address: this.config.address,
+            functionName: "transferFrom",
+            account: this.config.client.wallet.account!,
+            chain: this.config.client.wallet.chain!
+        });
+    }
 
 }

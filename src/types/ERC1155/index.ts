@@ -1,5 +1,7 @@
 import { Log } from "viem";
 
+export * from "./extensions/ERC1155Mintable";
+
 export interface IERC1155Events {
    ApprovalForAll: (data: (Log & { args: IERC1155ApprovalForAllEventParams })) => void;
    TransferBatch: (data: (Log & { args: IERC1155TransferBatchEventParams })) => void;

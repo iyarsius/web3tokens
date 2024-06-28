@@ -2,16 +2,20 @@
   "scripts": {
     "test": "ts-node test.ts",
     "build": "tsc",
-    "sendNpm": "tsc && cd ./dist && npm version patch && npm publish --access=public"
+    "sendNpm": "tsc && cd ./dist && npm version patch && npm publish --access=public",
+    "gendocs": "rm -rf ./docs && mkdir ./docs && mkdir ./etc && tsc && npx api-extractor run --local && api-documenter yaml --input-folder ./temp && node ./dev/gendoc.js && rm -rf etc && rm -rf temp && rm -rf yaml"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
     "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.0",
     "ts-node": "^10.9.2",
     "typedoc-theme-hierarchy": "^4.1.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@microsoft/tsdoc": "^0.15.0",
+    "@microsoft/tsdoc-config": "^0.17.0",
     "viem": "^2.13.3"
   },
   "name": "@iyarsius/web3tokens",
