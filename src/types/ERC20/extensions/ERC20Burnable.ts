@@ -24,23 +24,6 @@ export interface IERC20Burnable {
    * 
    * @param args The parameters to be passed into `burnFrom` function of the ERC20 contract.
    * 
-   * @example
-   * ```ts
-   * const balance = await erc20.balanceOf(accountAddress); // return 20n
-   * 
-   * // value is in lower units. (see ERC20.decimals())
-   * const tx = await erc20.burnFrom({
-   *    account: accountAddress,
-   *    value: 10n * 10 ** decimals
-   * }).execute(); // burn 10 tokens
-   * 
-   * // wait for 3 confirmations
-   * await tx.waitForReceipt(3);
-   * 
-   * // check balance again
-   * const newBalance = await erc20.balanceOf(accountAddress); // return 10n
-   * ```
-   * 
    * @returns a `ContractOperation` instance.
    *
    * @remarks
