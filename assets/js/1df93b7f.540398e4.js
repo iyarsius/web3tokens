@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkweb3tokens=self.webpackChunkweb3tokens||[]).push([[4583],{6866:(e,s,t)=>{t.r(s),t.d(s,{default:()=>u});t(6540);var n=t(6347),r=t(4848);function u(){return(0,r.jsx)(n.rd,{to:"/docs/intro"})}}}]);
