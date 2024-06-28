@@ -5,7 +5,7 @@ A library for interacting with EVM tokens such as ERC20, ERC721 and ERC1155.
 # Installation
 
 ```
-npm i @iyarsius/web3tokens
+npm i @lunarislab/web3tokens
 ```
 
 # Usage
@@ -13,7 +13,7 @@ npm i @iyarsius/web3tokens
 This package is built on top of [Viem](https://viem.sh/) so you'll need to install it and initialize both public and wallet clients.
 
 ```ts
-import { Web3Tokens } from '@iyarsius/web3-tokens';
+import { Web3Tokens } from '@lunarislab/web3tokens';
 
 // Viem stuffs
 import { createPublicClient, createWalletClient, http } from "viem";
