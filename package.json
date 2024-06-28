@@ -10,12 +10,9 @@
     "dotenv": "^16.4.5",
     "js-yaml": "^4.1.0",
     "ts-node": "^10.9.2",
-    "typedoc-theme-hierarchy": "^4.1.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@microsoft/tsdoc": "^0.15.0",
-    "@microsoft/tsdoc-config": "^0.17.0",
     "viem": "^2.13.3"
   },
   "name": "@lunarislab/web3tokens",
