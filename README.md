@@ -13,7 +13,7 @@ npm i @iyarsius/web3tokens
 This package is built on top of [Viem](https://viem.sh/) so you'll need to install it and initialize both public and wallet clients.
 
 ```ts
-import { Web3Tokens } from 'web3-tokens';
+import { Web3Tokens } from '@iyarsius/web3-tokens';
 
 // Viem stuffs
 import { createPublicClient, createWalletClient, http } from "viem";
@@ -65,18 +65,18 @@ const balance = await token.balanceOf(account.address);
 // Write method are a bit different since you have multiple options to execute them:
 
 // 1. Simulate the transaction
-const transaction = await token.transfer.simulate({
+const transaction = await token.transfer({
     to: "0x...",
     value: 50000
-});
+}).simulate();
 
 // this will return the transaction result, and some infomation about the request.
 
 // 2. Execute the transaction
-const transaction = await token.transfer.execute({
+const transaction = await token.transfer({
     to: "0x...",
     value: 50000
-});
+}).execute();
 
 // this send the transanction to the blockchain and return a transaction instance that you can use like this:
 console.log(transaction.hash); // returns the transaction hash
@@ -90,15 +90,15 @@ In case you are using a smart client with same interface than viem, you can exec
 ```ts
 // 3. get the transaction data, ready to be executed and sent in a batch transaction,
 // for example:
-const transaction1 = await token.transfer.getTxData({
+const transaction1 = await token.transfer({
     to: "0x...",
     value: 50000
-});
+}).getTxData();
 
-const transaction2 = await token.transfer.getTxData({
+const transaction2 = await token.transfer({
     to: "0x...",
     value: 50000
-});
+}).getTxData();
 
 // this function is not natively supported by viem, but some library can add ways
 // to batch transactions using smart accounts.
