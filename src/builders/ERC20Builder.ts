@@ -5,11 +5,10 @@ import { Address } from "viem";
 import { ERC20 } from "../structures/ERC20";
 import { Ownable, AccessControl, AccessManaged } from "../structures/access";
 import { IOwnable, IAccessControl, IAccessManaged } from "../types/access";
-import { ERC20Mintable, ERC20Pausable, ERC20Burnable, ERC20FlashMint } from "../structures/ERC20/extensions";
-import { IERC20Mintable, IERC20Burnable, IERC20Pausable, IERC20FlashMint } from "../types/ERC20";
+import { ERC20Mintable, ERC20Pausable, ERC20Burnable, ERC20FlashMint, ERC20Permit } from "../structures/ERC20/extensions";
+import { IERC20Mintable, IERC20Burnable, IERC20Pausable, IERC20FlashMint, IERC20Permit } from "../types/ERC20";
 import { IClient } from "../types/Client";
 import { IContractConfig } from "../types/Contracts";
-import { ERC20Permit, IERC20Permit } from "../structures/ERC20/extensions/ERC20Permit";
 
 /**
  * @category Builders

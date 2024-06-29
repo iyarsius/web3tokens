@@ -1,15 +1,8 @@
 import * as abi from "../../../abis//ERC20/extensions/ERC20Permit";
-import { IERC20PermitEip712DomainReturns, IERC20PermitEvents, IERC20PermitPermitParams } from "../../../types//ERC20/extensions/ERC20Permit";
+import { IERC20Permit, IERC20PermitEip712DomainReturns, IERC20PermitEvents, IERC20PermitPermitParams } from "../../../types//ERC20/extensions/ERC20Permit";
 import { ContractOperation } from "../../ContractOperation";
 import { IContractConfig } from "../../../types/Contracts";
-import { Address, WatchContractEventReturnType } from "viem";
-
-export interface IERC20Permit {
-    on<T extends keyof IERC20PermitEvents>(eventName: T, callback: IERC20PermitEvents[T]): WatchContractEventReturnType;
-    DOMAIN_SEPARATOR(): Promise<string>;
-    eip712Domain(): Promise<IERC20PermitEip712DomainReturns>;
-    nonces(owner: string): Promise<number>;
-}
+import { Address } from "viem";
 
 export class ERC20Permit implements IERC20Permit {
     address: Address;
