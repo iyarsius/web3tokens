@@ -9,6 +9,7 @@ import { ERC20Mintable, ERC20Pausable, ERC20Burnable, ERC20FlashMint } from "../
 import { IERC20Mintable, IERC20Burnable, IERC20Pausable, IERC20FlashMint } from "../types/ERC20";
 import { IClient } from "../types/Client";
 import { IContractConfig } from "../types/Contracts";
+import { ERC20Permit, IERC20Permit } from "../structures/ERC20/extensions/ERC20Permit";
 
 /**
  * @category Builders
@@ -65,6 +66,10 @@ export class ERC20Builder<T = ERC20> extends ContractBuilder {
 
   setFlashMint(): ERC20Builder<T & IERC20FlashMint> {
     return this.setExtension(ERC20FlashMint);
+  };
+
+  setPermit(): ERC20Builder<T & IERC20Permit> {
+    return this.setExtension(ERC20Permit);
   };
 
   get(address: Address): T {
