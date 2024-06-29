@@ -1,6 +1,26 @@
-# Web3Tokens
+<h1 align="center">Web3Tokens</h1>
+<div align="center">
+  <p align="left">
+    <strong>Web3Tokens</strong> is designed to simplify the interaction with Ethereum Virtual Machine (EVM) tokens, including ERC20, ERC721, and ERC1155 standards. This library aims to make it easier for new developers to engage with smart contracts, offering an accessible entry point into blockchain development.
+  </p>
+  <a href="https://lunaris-lab.github.io/web3tokens/docs/intro">
+    <img src="https://img.shields.io/badge/docs-available-blue" alt="Documentation Badge">
+  </a>
+  <a href="https://www.npmjs.com/package/@lunarislab/web3tokens">
+    <img src="https://img.shields.io/npm/v/@lunarislab/web3tokens.svg" alt="NPM Version Badge">
+  </a>
+  <a href="https://github.com/lunaris-lab/web3tokens/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/lunaris-lab/web3tokens.svg" alt="License Badge">
+  </a>
+</div>
 
-A comprehensive library for interacting with EVM tokens, including ERC20, ERC721, and ERC1155 standards.
+## Vision and Goals
+
+The primary goal of Web3Tokens is to simplify the use of smart contracts, specifically focusing on token interactions. By providing a user-friendly interface and abstracting the complexities of smart contracts, ABIs, and signatures, Web3Tokens empowers developers—especially those who are new to blockchain development—to jump right in and start building.
+
+## Prerequisites
+
+Before you start using Web3Tokens, you should have a basic understanding of [Viem](https://viem.sh/). This knowledge is essential for correctly instantiating the client and making the most of the library's features.
 
 ## Installation
 
@@ -9,10 +29,6 @@ To install the package, run the following command:
 ```bash
 npm i @lunarislab/web3tokens
 ```
-
-## Usage
-
-This package is built on top of [Viem](https://viem.sh/). Therefore, you'll need to install Viem and initialize both public and wallet clients.
 
 ### Example Setup
 
@@ -140,6 +156,6 @@ const erc721Burnable = tokens.erc721().setBurnable().get('0x...');
 const erc1155Access = tokens.erc1155().setAccessControl().get('0x...');
 ```
 
-## Contribution
+### Contribution and Community
 
-This library is still under development. Contributions are welcome! Feel free to open issues or submit pull requests to help improve the project.
+Web3Tokens is an open-source project, and all contributions are welcome. Whether you’re a seasoned developer or just starting, your ideas and code improvements are valuable. Feel free to open issues or pull requests on our GitHub repository.
