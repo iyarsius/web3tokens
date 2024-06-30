@@ -65,5 +65,4 @@ export class ERC20Permit implements IERC20Permit {
             chain: this.config.client.wallet.chain!
         });
     }
-
 }

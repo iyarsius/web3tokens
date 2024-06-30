@@ -1,4 +1,5 @@
 import { Address, Log, WatchContractEventReturnType } from "viem";
+import { ContractOperation } from "../../../structures/ContractOperation";
 
 export interface IERC20PermitEvents {
   EIP712DomainChanged: (data: (Log & { args: IERC20PermitEIP712DomainChangedEventParams })) => void;
@@ -31,4 +32,5 @@ export interface IERC20Permit {
   DOMAIN_SEPARATOR(): Promise<string>;
   eip712Domain(): Promise<IERC20PermitEip712DomainReturns>;
   nonces(owner: string): Promise<number>;
+  permit(params: IERC20PermitPermitParams): ContractOperation;
 }

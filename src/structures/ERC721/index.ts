@@ -6,6 +6,16 @@ import { Address } from "viem";
 
 export class ERC721 {
     address: Address;
+    /** The name of the token.
+     * 
+     * Requires `erc721.fetch()` to be called.
+     */
+    name?: string;
+    /** The symbol of the token (usually a shorter version of the name).
+     * 
+     * Requires `erc721.fetch()` to be called.
+     */
+    symbol?: string;
 
     constructor(protected config: IContractConfig) {
         this.address = config.address
@@ -18,6 +28,40 @@ export class ERC721 {
             onLogs: logs => logs.map(l => callback(l as any))
         })
     };
+
+    async fetch(): Promise<void> {
+        const [name, symbol] = await Promise.all([this._name(), this._symbol()]);
+
+        this.name = name;
+        this.symbol = symbol;
+    }
+
+    protected async _name(): Promise<string> {
+        return await this.config.client.public.readContract({
+            abi: [abi.name],
+            address: this.address,
+            functionName: "name",
+            args: []
+        }) as any
+    }
+
+    protected async _symbol(): Promise<string> {
+        return await this.config.client.public.readContract({
+            abi: [abi.symbol],
+            address: this.address,
+            functionName: "symbol",
+            args: []
+        }) as any
+    }
+
+    async tokenURI(tokenId: number): Promise<string> {
+        return await this.config.client.public.readContract({
+            abi: [abi.tokenURI],
+            address: this.address,
+            functionName: "tokenURI",
+            args: [tokenId]
+        }) as any
+    }
 
     public approve(args: IERC721ApproveParams) {
         return new ContractOperation(this.config.client, {
@@ -54,15 +98,6 @@ export class ERC721 {
             address: this.address,
             functionName: "isApprovedForAll",
             args: [owner, operator]
-        }) as any
-    }
-
-    async name(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.name],
-            address: this.address,
-            functionName: "name",
-            args: []
         }) as any
     }
 
@@ -103,24 +138,6 @@ export class ERC721 {
             address: this.address,
             functionName: "supportsInterface",
             args: [interfaceId]
-        }) as any
-    }
-
-    async symbol(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.symbol],
-            address: this.address,
-            functionName: "symbol",
-            args: []
-        }) as any
-    }
-
-    async tokenURI(tokenId: number): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.tokenURI],
-            address: this.address,
-            functionName: "tokenURI",
-            args: [tokenId]
         }) as any
     }
 

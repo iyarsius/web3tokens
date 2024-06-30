@@ -72,9 +72,12 @@ const token = tokens.erc20()
     .setMintable()
     .setOwnable()
     .get('0x...');
-```
 
-Current supported extensions: `mintable`, `burnable`, `pausable`, `flashMint`, `ownable`, `accessControl`, `accessManaged`.
+// fetch contract metadata (name, symbol and decimals)
+await token.fetch();
+
+console.log(token)
+```
 
 ### Calling Contract Methods
 
@@ -145,14 +148,21 @@ ERC721 and ERC1155 follow a similar approach to ERC20.
 
 ### Example Setup
 
-```typescript
+```ts
 const erc721 = tokens.erc721().get('0x...');
 const erc1155 = tokens.erc1155().get('0x...');
 
-// ERC721 extensions: Burnable, Mintable, Pausable, Ownable, AccessManaged, AccessControl
+await erc721.fetch(); // fetch name and symbol
+console.log(erc721)
+```
+
+you can also add extensions to the tokens:
+
+```ts
+// add ERC721 extensions if needed
 const erc721Burnable = tokens.erc721().setBurnable().get('0x...');
 
-// ERC1155 extensions: AccessControl (more extensions are being added)
+// add ERC1155 extensions if needed
 const erc1155Access = tokens.erc1155().setAccessControl().get('0x...');
 ```
 

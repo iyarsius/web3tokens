@@ -16,18 +16,18 @@ export class ERC20Burnable implements IERC20Burnable {
      * 
      * @example
      * ```ts
-     * const balance = await erc20.balanceOf(myAddress); // return 2000n
+     * const balance = await erc20.balanceOf(myAddress); // return 200000n
      * 
      * const tx = await erc20.burn({
-     *   // value is in lower units. (see ERC20.decimals())
-     *   value: 1000n
+     *   // value is in lower units. (see ERC20.decimals)
+     *   value: erc20.toLowerUnits(10)
      * }).execute();
      * 
      * // wait for 3 confirmations
      * await tx.waitForReceipt(3);
      * 
      * // check balance again
-     * const newBalance = await erc20.balanceOf(myAddress); // return 1000n
+     * const newBalance = await erc20.balanceOf(myAddress); // return 100000n
      * ```
      */
     public burn(args: IERC20BurnableBurnParams) {
@@ -45,19 +45,19 @@ export class ERC20Burnable implements IERC20Burnable {
      * 
      * @example
      * ```ts
-     * const balance = await erc20.balanceOf(accountAddress); // return 20n
+     * const balance = await erc20.balanceOf(accountAddress); // return 200000n
      * 
-     * // value is in lower units. (see ERC20.decimals())
+     * // value is in lower units. (see ERC20.decimals)
      * const tx = await erc20.burnFrom({
      *    account: accountAddress,
-     *    value: 10n * 10 ** decimals
+     *    value: erc20.toLowerUnits(10)
      * }).execute(); // burn 10 tokens
      * 
      * // wait for 3 confirmations
      * await tx.waitForReceipt(3);
      * 
      * // check balance again
-     * const newBalance = await erc20.balanceOf(accountAddress); // return 10n
+     * const newBalance = await erc20.balanceOf(accountAddress); // return 100000n
      * ```
      */
     public burnFrom(args: IERC20BurnableBurnFromParams) {

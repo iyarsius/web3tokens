@@ -15,7 +15,8 @@ export class ERC20FlashMint implements IERC20FlashMint {
     /** {@inheritdoc IERC20FlashMint.flashFee}
      * @example
      * ```ts
-     * const amountToLoan = 100000n;
+     * // amount is in lower units (see ERC20.decimals)
+     * const amountToLoan = erc20.toLowerUnits(10.45);
      * const flashFee = await erc20FlashMint.flashFee(amountToLoan);
      * 
      * // to perform the loan, you need to pay the loan amount and the flash fee.

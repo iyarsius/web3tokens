@@ -11,9 +11,149 @@ import { Address } from "viem";
  */
 export class ERC20 {
     address: Address;
+    /**
+     * The number of decimals used to get its user representation.
+     * For example, if `decimals` equals `2`, a balance of `505` tokens should
+     * be displayed to a user as `5.05` (`505 / 10 ** 2`).
+     * 
+     * Requires `erc20.fetch()` to be called.
+     * 
+     * @example
+     *```ts
+     * const balance = await erc20.balanceOf(account);
+     * 
+     * // balance should be displayed to user as following:
+     * const userBalance = balance / (10n ** erc20.decimals); // be careful to use BigInts
+     * 
+     * // or you could use built-in function
+     * const userBalance = erc20.toHumanUnits(balance); // be sure to pass lower units
+     * ```
+     * 
+     * @remarks
+     * warning: Due to the size of the numbers, you have to use BigInts to avoid number overflow.
+     * For example, instead of using `10` as value, use `10n`.
+     * 
+     * info: Tokens usually opt for a value of 18, imitating the relationship between Ether and Wei.
+     * This is the default value for ERC20, unless it has been overridden.
+     */
+    decimals?: number;
+    /**
+     * The name of the token.
+     * 
+     * Requires `erc20.fetch()` to be called.
+     */
+    name?: string;
+    /**
+     * The symbol of the token, usually a shorter version of the
+     * name. (BTC, ETH...).
+     * 
+     * Requires `erc20.fetch()` to be called.
+     */
+    symbol?: string;
 
     constructor(protected config: IContractConfig) {
         this.address = config.address
+    }
+
+    /**
+     * Fetch the token's name, symbol and decimals.
+     */
+    async fetch(): Promise<void> {
+        const [decimals, name, symbol] = await Promise.all([
+            this._decimals(),
+            this._name(),
+            this._symbol()
+        ]);
+
+        this.decimals = decimals;
+        this.name = name;
+        this.symbol = symbol;
+    }
+
+    /**
+     * Convert a token's units into it's lower units.
+     * 
+     * @example
+     * ```ts
+     * // You want to convert 45.3 USDT into lower units.
+     * // assume that `erc20` is an instance of the USDT token
+     * // and that the token has 18 decimals.
+     * const lowerUnits = erc20.toLowerUnits(45.3) // returns 45300000000000000000n
+     * ```
+     * 
+     * @param value The value to convert into lower units.
+     * @returns The converted value in lower units.
+     */
+    toLowerUnits(value: number | bigint): bigint {
+        if (!this.decimals) throw new Error('ERC20 contract must have decimals set, please fetch token data first');
+
+        const decimals = this.decimals;
+        const [integerPart, fractionalPart = ''] = value.toString().split('.');
+
+        if (fractionalPart.length > decimals) throw new Error('Fractional part exceeds token decimals');
+
+        // Pad the fractional part to match the decimals length
+        const fractionalPartPadded = fractionalPart.padEnd(decimals, '0');
+
+        const combined = integerPart + fractionalPartPadded;
+
+        return BigInt(combined);
+    };
+
+    /**
+     * Convert a token's lower units into human readable units.
+     * 
+     * @example
+     * ```ts
+     * // You want to convert 45300000000000000000n USDT into human units.
+     * // assume that `erc20` is an instance of the USDT token
+     * // and that the token has 18 decimals.
+     * const lowerUnits = erc20.toHumanUnits(45300000000000000000n) // returns 45.3
+     * ```
+     * 
+     * @param value The value to convert into human readable units.
+     * @returns The converted value in human readable units.
+     */
+    toHumanUnits(value: bigint): number {
+        if (!this.decimals) throw new Error('ERC20 contract must have decimals set, please fetch token data first');
+
+        const decimals = this.decimals;
+        const valueStr = value.toString();
+
+        // Handle cases where the value is shorter than the number of decimals
+        const integerPart = valueStr.length > decimals ? valueStr.slice(0, -decimals) : '0';
+        const fractionalPart = valueStr.length > decimals ? valueStr.slice(-decimals) : valueStr.padStart(decimals, '0');
+
+        const combined = integerPart + '.' + fractionalPart;
+
+        return parseFloat(combined);
+    }
+
+    protected async _decimals(): Promise<number> {
+        return await this.config.client.public.readContract({
+            abi: [abi.decimals],
+            address: this.address,
+            functionName: "decimals",
+            args: []
+        }) as any
+    }
+
+    protected async _name(): Promise<string> {
+        return await this.config.client.public.readContract({
+            abi: [abi.name],
+            address: this.address,
+            functionName: "name",
+            args: []
+        }) as any
+    }
+
+    protected async _symbol(): Promise<string> {
+        return await this.config.client.public.readContract({
+            abi: [abi.symbol],
+            address: this.address,
+            functionName: "symbol",
+            args: []
+        }) as any
     }
 
     /**
@@ -22,7 +162,7 @@ export class ERC20 {
      * @remarks The function is calling `WatchContractEvent` witch will attempt to create an Event Filter
      * and listen to changes to the Filter per polling interval, however, if the RPC Provider does not support
      * Filters this function will not work.
-      *
+     *
      * @param eventName the name of the event
      * @param callback the function to call when the event is triggered
      */
@@ -49,7 +189,7 @@ export class ERC20 {
      * // check allowance of spender on owner's balance;
      * const allowance = await erc20.allowance(owner, spender);
      * 
-     * // value is returned in lower unit of tokens (see ERC20.decimals());
+     * // value is returned in lower unit of tokens (see ERC20.decimals);
      * console.log(allowance) // 100000000n
      * ```
      * 
@@ -92,7 +232,7 @@ export class ERC20 {
      * // allow to "spender" to spend 10 tokens
      * const transaction = await erc20.approve({
      *     spender: allowedSpender,
-     *     value: 10n * 10n ** decimals // use lower units (see ERC20.decimals())
+     *     value: erc20.toLowerUnits(10n) // use lower units (see ERC20.decimals)
      * }).execute();
      * 
      * // wait for 3 confirmations
@@ -119,7 +259,7 @@ export class ERC20 {
      * ```ts
      * const account = "0x000...";
      * 
-     * // balance are in lower units (see ERC20.decimals())
+     * // balance are in lower units (see ERC20.decimals)
      * const accountBalance = await erc20.balanceOf(account);
      * ```
      * 
@@ -135,89 +275,12 @@ export class ERC20 {
     }
 
     /**
-     * Get the number of decimals used to get its user representation.
-     * For example, if `decimals` equals `2`, a balance of `505` tokens should
-     * be displayed to a user as `5.05` (`505 / 10 ** 2`).
-     * 
-     * @example
-     *```ts
-     * const balance = await erc20.balanceOf(account);
-     * const decimals = await erc20.decimals();
-     * 
-     * // balance should be displayed to user as following:
-     * const userBalance = balance / (10n ** decimals); // be careful to use BigInts
-     * ```
-     * 
-     * @remarks
-     * warning: Due to the size of the numbers, you have to use BigInts to avoid number overflow.
-     * For example, instead of using `10` as value, use `10n`.
-     * 
-     * info: Tokens usually opt for a value of 18, imitating the relationship between Ether and Wei.
-     * This is the default value for ERC20, unless it has been overridden.
-     * 
-     * @returns The number of decimals.
-     */
-    async decimals(): Promise<number> {
-        return await this.config.client.public.readContract({
-            abi: [abi.decimals],
-            address: this.address,
-            functionName: "decimals",
-            args: []
-        }) as any
-    }
-
-    /**
-     * Get the name of the token.
-     * 
-     * @example
-     * ```ts
-     * const dai = client.erc20().get("DAI_ADDRESS");
-     * 
-     * // return "Dai Stablecoin"
-     * const symbol = await dai.name();
-     * ```
-     * @returns The name of the token.
-     */
-    async name(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.name],
-            address: this.address,
-            functionName: "name",
-            args: []
-        }) as any
-    }
-
-
-    /**
-     * Return the symbol of the token, usually a shorter version of the
-     * name. (BTC, ETH...)
-     * 
-     * @example
-     * ```ts
-     * const dai = client.erc20().get("DAI_ADDRESS");
-     * 
-     * // return "DAI"
-     * const symbol = await dai.symbol();
-     * ```
-     * 
-     * @returns The symbol of the token.
-     */
-    async symbol(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.symbol],
-            address: this.address,
-            functionName: "symbol",
-            args: []
-        }) as any
-    }
-
-    /**
      * Return the total supply of tokens, which is the amount of tokens that
      * exist in total.
      * 
      * @example
      * ```ts
-     * // supply is displayed in lower units (see ERC20.decimals())
+     * // supply is displayed in lower units (see ERC20.decimals)
      * const supply = await token.totalSupply()
      *```
      * 
@@ -250,8 +313,7 @@ export class ERC20 {
      * const transaction = await token.transfer({
      *     from: me,
      *     to: receiver,
-     *     // use big numbers to avoid overflows (e.g 5000 become 5000n)
-     *     value: 5n * 10n ** decimals
+     *     value: token.toLowerUnits(5)
      * }).execute();
      * 
      * // wait for 3 confirmations
@@ -291,8 +353,7 @@ export class ERC20 {
      * const transaction = await erc20.transferFrom({
      *     from: sender,
      *     to: receiver,
-     *     // use big numbers to avoid overflows (e.g 5000 become 5000n)
-     *     value: 5n * 10n ** decimals
+     *     value: erc20.toLowerUnits(5)
      * }).execute();
      * 
      * // wait for 3 confirmations
