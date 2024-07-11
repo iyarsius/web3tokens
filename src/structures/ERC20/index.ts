@@ -59,15 +59,36 @@ export class ERC20 {
      * Fetch the token's name, symbol and decimals.
      */
     async fetch(): Promise<void> {
-        const [decimals, name, symbol] = await Promise.all([
-            this._decimals(),
-            this._name(),
-            this._symbol()
-        ]);
+        const [decimals, name, symbol] = await this.config.client.public.multicall({
+            contracts: [
+                {
+                    abi: [abi.decimals],
+                    address: this.address,
+                    functionName: "decimals",
+                    args: []
+                },
+                {
+                    abi: [abi.name],
+                    address: this.address,
+                    functionName: "name",
+                    args: []
+                },
+                {
+                    abi: [abi.symbol],
+                    address: this.address,
+                    functionName: "symbol",
+                    args: []
+                }
+            ]
+        })
 
-        this.decimals = decimals;
-        this.name = name;
-        this.symbol = symbol;
+        if (decimals.status === "failure") throw decimals.error;
+        if (name.status === "failure") throw name.error;
+        if (symbol.status === "failure") throw symbol.error;
+
+        this.decimals = decimals.result as any;
+        this.name = name.result as any;
+        this.symbol = symbol.result as any;
     }
 
     /**
@@ -127,33 +148,6 @@ export class ERC20 {
         const combined = integerPart + '.' + fractionalPart;
 
         return parseFloat(combined);
-    }
-
-    protected async _decimals(): Promise<number> {
-        return await this.config.client.public.readContract({
-            abi: [abi.decimals],
-            address: this.address,
-            functionName: "decimals",
-            args: []
-        }) as any
-    }
-
-    protected async _name(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.name],
-            address: this.address,
-            functionName: "name",
-            args: []
-        }) as any
-    }
-
-    protected async _symbol(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.symbol],
-            address: this.address,
-            functionName: "symbol",
-            args: []
-        }) as any
     }
 
     /**

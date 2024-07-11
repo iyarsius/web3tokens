@@ -30,28 +30,28 @@ export class ERC721 {
     };
 
     async fetch(): Promise<void> {
-        const [name, symbol] = await Promise.all([this._name(), this._symbol()]);
+        const [name, symbol] = await this.config.client.public.multicall({
+            contracts: [
+                {
+                    abi: [abi.name],
+                    address: this.address,
+                    functionName: "name",
+                    args: []
+                },
+                {
+                    abi: [abi.symbol],
+                    address: this.address,
+                    functionName: "symbol",
+                    args: []
+                }
+            ]
+        });
 
-        this.name = name;
-        this.symbol = symbol;
-    }
+        if (name.status === "failure") throw name.error;
+        if (symbol.status === "failure") throw symbol.error;
 
-    protected async _name(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.name],
-            address: this.address,
-            functionName: "name",
-            args: []
-        }) as any
-    }
-
-    protected async _symbol(): Promise<string> {
-        return await this.config.client.public.readContract({
-            abi: [abi.symbol],
-            address: this.address,
-            functionName: "symbol",
-            args: []
-        }) as any
+        this.name = name.result as any;
+        this.symbol = symbol.result as any;
     }
 
     async tokenURI(tokenId: number): Promise<string> {
