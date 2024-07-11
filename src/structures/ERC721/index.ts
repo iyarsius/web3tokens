@@ -16,6 +16,7 @@ export class ERC721 {
      * Requires `erc721.fetch()` to be called.
      */
     symbol?: string;
+    protected isBytes32Encoded = false;
 
     constructor(protected config: IContractConfig) {
         this.address = config.address
@@ -29,29 +30,46 @@ export class ERC721 {
         })
     };
 
+    protected _convertStringToBytes32InOutputsAbi(abi: any) {
+        const newOutputs = [];
+        for (const output of abi.outputs) {
+            if (output.internalType === "string") output.type = "bytes32";
+            newOutputs.push(output);
+        }
+
+        abi.outputs = newOutputs;
+        return abi;
+    }
+
     async fetch(): Promise<void> {
-        const [name, symbol] = await this.config.client.public.multicall({
+        const res = await this.config.client.public.multicall({
             contracts: [
                 {
-                    abi: [abi.name],
+                    abi: [this.isBytes32Encoded ? this._convertStringToBytes32InOutputsAbi(abi.name) : abi.name],
                     address: this.address,
                     functionName: "name",
                     args: []
                 },
                 {
-                    abi: [abi.symbol],
+                    abi: [this.isBytes32Encoded ? this._convertStringToBytes32InOutputsAbi(abi.symbol) : abi.symbol],
                     address: this.address,
                     functionName: "symbol",
                     args: []
                 }
-            ]
-        });
+            ],
+            allowFailure: false
+        }).catch(e => {
+            this.isBytes32Encoded = !this.isBytes32Encoded;
 
-        if (name.status === "failure") throw name.error;
-        if (symbol.status === "failure") throw symbol.error;
+            if (!this.isBytes32Encoded) throw e;
 
-        this.name = name.result as any;
-        this.symbol = symbol.result as any;
+            this.fetch();
+        }) as any[];
+
+
+        if (!res) return
+        this.name = this.isBytes32Encoded ? bytesToString(hexToBytes(res[0])).replace(/\x00/g, "") : res[0];
+        this.symbol = this.isBytes32Encoded ? bytesToString(hexToBytes(res[1])).replace(/\x00/g, "") : res[1];
     }
 
     async tokenURI(tokenId: number): Promise<string> {

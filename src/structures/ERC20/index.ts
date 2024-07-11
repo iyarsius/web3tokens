@@ -1,8 +1,8 @@
 import * as abi from "../../abis/ERC20";
-import { IERC20Events, IERC20ApproveParams, IERC20TransferParams, IERC20TransferFromParams } from "../../types/ERC20";
+import { IERC20Events, IERC20ApproveParams, IERC20TransferFromParams } from "../../types/ERC20";
 import { ContractOperation } from "../ContractOperation";
 import { IContractConfig } from "../../types/Contracts";
-import { Address } from "viem";
+import { Address, bytesToString, hexToBytes } from "viem";
 
 /**
  * An ERC20 token contract keeps track of fungible tokens: any one token is exactly equal to any other token;
@@ -51,44 +51,62 @@ export class ERC20 {
      */
     symbol?: string;
 
+    protected isBytes32Encoded = false;
+
     constructor(protected config: IContractConfig) {
         this.address = config.address
+    }
+
+    protected _convertStringToBytes32InOutputsAbi(abi: any) {
+        const newOutputs = [];
+        for (const output of abi.outputs) {
+            if (output.internalType === "string") output.type = "bytes32";
+            newOutputs.push(output);
+        }
+
+        abi.outputs = newOutputs;
+        return abi;
     }
 
     /**
      * Fetch the token's name, symbol and decimals.
      */
     async fetch(): Promise<void> {
-        const [decimals, name, symbol] = await this.config.client.public.multicall({
+        const res = await this.config.client.public.multicall({
             contracts: [
                 {
-                    abi: [abi.decimals],
+                    abi: [this.isBytes32Encoded ? this._convertStringToBytes32InOutputsAbi(abi.decimals) : abi.decimals],
                     address: this.address,
                     functionName: "decimals",
                     args: []
                 },
                 {
-                    abi: [abi.name],
+                    abi: [this.isBytes32Encoded ? this._convertStringToBytes32InOutputsAbi(abi.name) : abi.name],
                     address: this.address,
                     functionName: "name",
                     args: []
                 },
                 {
-                    abi: [abi.symbol],
+                    abi: [this.isBytes32Encoded ? this._convertStringToBytes32InOutputsAbi(abi.symbol) : abi.symbol],
                     address: this.address,
                     functionName: "symbol",
                     args: []
                 }
-            ]
-        })
+            ],
+            allowFailure: false
+        }).catch(e => {
+            this.isBytes32Encoded = !this.isBytes32Encoded;
 
-        if (decimals.status === "failure") throw decimals.error;
-        if (name.status === "failure") throw name.error;
-        if (symbol.status === "failure") throw symbol.error;
+            if (!this.isBytes32Encoded) throw e;
 
-        this.decimals = decimals.result as any;
-        this.name = name.result as any;
-        this.symbol = symbol.result as any;
+            return this.fetch();
+        }) as any;
+
+        if (!res) return
+
+        this.decimals = res[0];
+        this.name = this.isBytes32Encoded ? bytesToString(hexToBytes(res[1])).replace(/\x00/g, "") : res[1];
+        this.symbol = this.isBytes32Encoded ? bytesToString(hexToBytes(res[2])).replace(/\x00/g, "") : res[2];
     }
 
     /**
